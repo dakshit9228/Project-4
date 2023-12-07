@@ -1,3 +1,7 @@
+import numpy as np
+import pandas as pd
+
+
 class BuildingDatasetCleaner:
     """
     This class is designed for cleaning the building dataset.
@@ -25,7 +29,7 @@ class BuildingDatasetCleaner:
         """
         self.building_dataset = dataset
 
-    def fill_missing_values(self, column_name, method='mean'):
+    def fill_missing_values(self, column_name, method="mean"):
         """
         Fills missing values in a specified column using a defined method ('mean', 'median', or 'mode').
 
@@ -39,11 +43,11 @@ class BuildingDatasetCleaner:
         if column_name not in self.building_dataset.columns:
             return f"Column '{column_name}' not found in the dataset."
 
-        if method == 'mean':
+        if method == "mean":
             fill_value = self.building_dataset[column_name].mean()
-        elif method == 'median':
+        elif method == "median":
             fill_value = self.building_dataset[column_name].median()
-        elif method == 'mode':
+        elif method == "mode":
             fill_value = self.building_dataset[column_name].mode()[0]
         else:
             return "Invalid method. Please choose 'mean', 'median', or 'mode'."
@@ -56,7 +60,7 @@ class BuildingDatasetCleaner:
         """
         self.building_dataset.dropna(inplace=True)
 
-    def convert_to_datetime(self, column_name, format_string='%d-%b-%Y'):
+    def convert_to_datetime(self, column_name, format_string="%d-%b-%Y"):
         """
         Converts a specified column to a datetime format.
 
@@ -68,11 +72,13 @@ class BuildingDatasetCleaner:
             The format string to use for the conversion. Default is '%d-%b-%Y'.
         """
         try:
-            self.building_dataset[column_name] = pd.to_datetime(self.building_dataset[column_name], format=format_string)
+            self.building_dataset[column_name] = pd.to_datetime(
+                self.building_dataset[column_name], format=format_string
+            )
         except ValueError as e:
             return f"Conversion error: {e}"
 
-    def remove_outliers(self, column_name, method='IQR'):
+    def remove_outliers(self, column_name, method="IQR"):
         """
         Removes outliers from a specified numeric column using the IQR or Z-score method.
 
@@ -86,16 +92,19 @@ class BuildingDatasetCleaner:
         if column_name not in self.building_dataset.columns:
             return f"Column '{column_name}' not found in the dataset."
 
-        if method == 'IQR':
+        if method == "IQR":
             Q1 = self.building_dataset[column_name].quantile(0.25)
             Q3 = self.building_dataset[column_name].quantile(0.75)
             IQR = Q3 - Q1
             lower_bound = Q1 - 1.5 * IQR
             upper_bound = Q3 + 1.5 * IQR
-            self.building_dataset = self.building_dataset[(self.building_dataset[column_name] >= lower_bound) &
-                                                          (self.building_dataset[column_name] <= upper_bound)]
-        elif method == 'Z-score':
+            self.building_dataset = self.building_dataset[
+                (self.building_dataset[column_name] >= lower_bound)
+                & (self.building_dataset[column_name] <= upper_bound)
+            ]
+        elif method == "Z-score":
             from scipy import stats
+
             z_scores = stats.zscore(self.building_dataset[column_name])
             abs_z_scores = np.abs(z_scores)
             self.building_dataset = self.building_dataset[(abs_z_scores < 3)]
@@ -114,8 +123,14 @@ class BuildingDatasetCleaner:
         if column_name not in self.building_dataset.columns:
             return f"Column '{column_name}' not found in the dataset."
 
-        self.building_dataset[column_name] = self.building_dataset[column_name].str.strip()  # Remove leading/trailing whitespace
-        self.building_dataset[column_name] = self.building_dataset[column_name].str.lower()  # Convert to lowercase
-        self.building_dataset[column_name] = self.building_dataset[column_name].str.replace('[^\w\s]', '')  # Remove special chars
-
-
+        self.building_dataset[column_name] = self.building_dataset[
+            column_name
+        ].str.strip()  # Remove leading/trailing whitespace
+        self.building_dataset[column_name] = self.building_dataset[
+            column_name
+        ].str.lower()  # Convert to lowercase
+        self.building_dataset[column_name] = self.building_dataset[
+            column_name
+        ].str.replace(
+            "[^\w\s]", ""
+        )  # Remove special chars

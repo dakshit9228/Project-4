@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: building-analysis
+Version: 0.2.1
+Summary: Classes for technical analysis of building dataset.
+Home-page: 
+Author: Dakshit
+Author-email: 
+License: MIT
+Requires-Dist: matplotlib>=3.0.2
+Requires-Dist: numpy>=1.15.2
+Requires-Dist: pandas>=0.23.4
+Requires-Dist: pandas-datareader>=0.7.0
+Requires-Dist: seaborn>=0.11.0
+Requires-Dist: statsmodels>=0.11.1
