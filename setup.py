@@ -5,7 +5,7 @@ setup(
     version="0.2.1",
     description="Classes for technical analysis of building dataset.",
     author="Dakshit",
-    author_email="",
+    author_email="dgolakiy@mail.yu.edu",
     license="MIT",
     url="",
     packages=["building_analysis"],
